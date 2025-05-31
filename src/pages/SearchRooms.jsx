@@ -274,8 +274,7 @@ const roomImages = {
     "https://radharidhani.in/img/fmn.jpg",
         "https://radharidhani.in/img/fmn-1.jpg",
                 "https://radharidhani.in/img/fmn-2.jpg",
-                        "https://radharidhani.in/img/fmn-3.jpg",
-                                                "https://radharidhani.in/img/fmn-4.jpg"
+                        "https://radharidhani.in/img/fmn-3.jpg"
 
 
 
@@ -283,7 +282,6 @@ const roomImages = {
   ],
   "Couple Room": [
     "https://radharidhani.in/img/cr.jpg",
-    "https://radharidhani.in/img/cr-1.jpg",
                             "https://radharidhani.in/img/cr-2.jpg",
                                                         "https://radharidhani.in/img/cr-3.jpg"
 
@@ -294,8 +292,7 @@ const roomImages = {
     "https://radharidhani.in/img/ssr.jpg",
     "https://radharidhani.in/img/ssr-1.jpg",
         "https://radharidhani.in/img/ssr-2.jpg",
-            "https://radharidhani.in/img/ssr-3.jpg",
-                "https://radharidhani.in/img/ssr-4.jpg"
+            "https://radharidhani.in/img/ssr-3.jpg"
 
 
 
@@ -303,8 +300,7 @@ const roomImages = {
   "Friends Room": [
     "https://radharidhani.in/img/fm-1.jpg",
     "https://radharidhani.in/img/fm-2.jpg",
-        "https://radharidhani.in/img/fm-3.jpg",
-            "https://radharidhani.in/img/fm-4.jpg"
+        "https://radharidhani.in/img/fm-3.jpg"
 
 
   ]
@@ -431,9 +427,10 @@ export default function SearchRooms() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className="container py-4">
+      <div className="container htfx py-4">
         {/* Search Section */}
         <div className="row g-4">
+          <h1 style="color:#933830">Kanha Dham Radha Ri Dhani</h1>
           <div className="col-md-6">
             <div className="card p-4">
               <h3 className="mb-3">1. Search</h3>
@@ -505,18 +502,17 @@ export default function SearchRooms() {
 
           <div className="col-md-6">
             <div className="alert alert-success">
-              ✔ Lock-in a great price, book your stay now! <br />
-              ✔ Need a room for just 1 day?{" "}
-              <a href="#" className="text-success text-decoration-underline">Click here to book by the hour!</a>
+              Lock-in a great price, book your stay now! and get 50% off on your stay.
             </div>
 
             <div className="bg-light p-3 rounded">
-              <ul className="list-unstyled mb-0">
-                <li>🍽 Multi-cuisine Veg Restaurant</li>
-                <li>🎠 Kids Zone</li>
-                <li>🚗 Paid pickup/drop Service</li>
-                <li>🏊 Swimming pool & Indoor games</li>
-                <li>🚉 Only 5 km from Itarsi Railway Station</li>
+              <ul className="mb-0">
+                <li>Traditional Rajasthani hospitality with modern comforts</li>
+                <li><b>FREE</b> access to all entertainment acitivties & Water Park</li>
+                <li>Rajasthani Food</li>
+                <li>Kids Zone</li>
+                <li>Water Park & Indoor games</li>
+                <li>Cultural Entertainment</li>
               </ul>
             </div>
           </div>
