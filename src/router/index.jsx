@@ -11,6 +11,7 @@ export default function Router() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/" element={<SearchRooms />} />
 
+
       </Routes>
     </BrowserRouter>
   );
