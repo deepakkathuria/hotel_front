@@ -1,5 +1,3 @@
-
-
 // import { useLocation, useNavigate } from "react-router-dom";
 // import { useState } from "react";
 // import axios from "axios";
@@ -205,7 +203,6 @@
 //   );
 // }
 
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import axios from "axios";
@@ -259,8 +256,8 @@ export default function Booking() {
       }
 
       setTimeout(() => {
-        navigate("/");
-      }, 5000); // 10 seconds
+        window.location.href = "https://radharidhani.in/";
+      }, 10000); // 10 seconds
     } catch (err) {
       console.error(err);
       alert("❌ Failed to confirm booking");
@@ -344,9 +341,11 @@ export default function Booking() {
           />
 
           <div className="alert alert-success">
-            ✅ Book your stay before the prices go up!<br />
+            ✅ Book your stay before the prices go up!
+            <br />
             <strong className="text-success">
-              Book risk free! Cancel for free anytime before 11:59 PM on Jun 5, 2025
+              Book risk free! Cancel for free anytime before 11:59 PM on Jun 5,
+              2025
             </strong>
           </div>
 
@@ -390,7 +389,8 @@ export default function Booking() {
             <div className="d-flex justify-content-between mb-2">
               <strong>Room only (50% OFF)</strong>
               <span>
-                ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹{subtotal}
+                ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹
+                {subtotal}
               </span>
             </div>
             <div className="d-flex justify-content-between mb-2">
@@ -436,10 +436,10 @@ export default function Booking() {
             <div className="modal-body">
               🎉 <strong>Your booking has been successfully confirmed!</strong>
               <br />
-              {/* <br />
+              <br />
               Redirecting to homepage in <strong>10 seconds...</strong>
-              <br /> */}
-              {/* <span className="text-muted small">Please wait...</span> */}
+              <br />
+              <span className="text-muted small">Please wait...</span>
             </div>
             <div className="modal-footer justify-content-center">
               <button
