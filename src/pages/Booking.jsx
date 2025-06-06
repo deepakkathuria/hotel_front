@@ -1,11 +1,15 @@
+
+
 // import { useLocation, useNavigate } from "react-router-dom";
-// import { useState } from "react";
+// import { useState, useRef } from "react";
 // import axios from "axios";
 // import dayjs from "dayjs";
+// import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 // export default function Booking() {
 //   const { state } = useLocation();
 //   const navigate = useNavigate();
+//   const modalRef = useRef(null);
 
 //   const [form, setForm] = useState({
 //     full_name: "",
@@ -21,8 +25,8 @@
 //   const discountedBasePrice = room.base_price * 0.5;
 //   const subtotal = discountedBasePrice * nights;
 //   const taxRate = 0.12;
-//   const tax = Math.round(subtotal * (taxRate / (1 + taxRate))); // tax is included in subtotal
-//   const total = subtotal; // no extra tax added
+//   const tax = Math.round(subtotal * (taxRate / (1 + taxRate)));
+//   const total = subtotal;
 
 //   const handleChange = (e) => {
 //     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,7 +46,15 @@
 //         tax,
 //         total,
 //       });
-//       alert("✅ Booking Confirmed!");
+
+//       if (modalRef.current) {
+//         const modal = new window.bootstrap.Modal(modalRef.current);
+//         modal.show();
+//       }
+
+//       setTimeout(() => {
+//         window.location.href = "https://radharidhani.in/";
+//       }, 10000); // 10 seconds
 //     } catch (err) {
 //       console.error(err);
 //       alert("❌ Failed to confirm booking");
@@ -126,9 +138,11 @@
 //           />
 
 //           <div className="alert alert-success">
-//             ✅ Book your stay before the prices go up!<br />
+//             ✅ Book your stay before the prices go up!
+//             <br />
 //             <strong className="text-success">
-//               Book risk free! Cancel for free anytime before 11:59 PM on Jun 5, 2025
+//               Book risk free! Cancel for free anytime before 11:59 PM on Jun 5,
+//               2025
 //             </strong>
 //           </div>
 
@@ -172,7 +186,8 @@
 //             <div className="d-flex justify-content-between mb-2">
 //               <strong>Room only (50% OFF)</strong>
 //               <span>
-//                 ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹{subtotal}
+//                 ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹
+//                 {subtotal}
 //               </span>
 //             </div>
 //             <div className="d-flex justify-content-between mb-2">
@@ -199,12 +214,52 @@
 //           </div>
 //         </div>
 //       </div>
+
+//       {/* ✅ Confirmation Modal */}
+//       <div
+//         className="modal fade"
+//         ref={modalRef}
+//         tabIndex="-1"
+//         aria-labelledby="bookingSuccessModalLabel"
+//         aria-hidden="true"
+//       >
+//         <div className="modal-dialog modal-dialog-centered">
+//           <div className="modal-content text-center">
+//             <div className="modal-header bg-success text-white">
+//               <h5 className="modal-title w-100" id="bookingSuccessModalLabel">
+//                 Booking Confirmed
+//               </h5>
+//             </div>
+//             <div className="modal-body">
+//               🎉 <strong>Your booking has been successfully confirmed!</strong>
+//               <br />
+//               <br />
+//               Redirecting to homepage in <strong>10 seconds...</strong>
+//               <br />
+//               <span className="text-muted small">Please wait...</span>
+//             </div>
+//             <div className="modal-footer justify-content-center">
+//               <button
+//                 type="button"
+//                 className="btn btn-outline-success"
+//                 data-bs-dismiss="modal"
+//               >
+//                 Close
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
 //     </div>
 //   );
 // }
 
+
+
+
+
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -214,12 +269,15 @@ export default function Booking() {
   const navigate = useNavigate();
   const modalRef = useRef(null);
 
+  const [timer, setTimer] = useState(null);
+  const [discount, setDiscount] = useState(0);
+
   const [form, setForm] = useState({
     full_name: "",
     email: "",
     mobile: "",
     gst_number: "",
-    special_request: "",
+    special_request: ""
   });
 
   const { checkin, checkout, adults, children, room } = state;
@@ -227,9 +285,21 @@ export default function Booking() {
   const nights = Math.max(1, dayjs(checkout).diff(dayjs(checkin), "day"));
   const discountedBasePrice = room.base_price * 0.5;
   const subtotal = discountedBasePrice * nights;
-  const taxRate = 0.12;
-  const tax = Math.round(subtotal * (taxRate / (1 + taxRate)));
-  const total = subtotal;
+  const total = Math.max(0, subtotal - Number(discount));
+
+  useEffect(() => {
+    if (timer === null) return;
+    if (timer === 0) {
+      window.location.href = "https://radharidhani.in/";
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -237,7 +307,7 @@ export default function Booking() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("https://radharidhani.in/api/confirm-booking", {
+      await axios.post("http://localhost:5000/api/confirm-booking", {
         ...form,
         checkin,
         checkout,
@@ -246,18 +316,15 @@ export default function Booking() {
         children,
         addons: [],
         subtotal,
-        tax,
-        total,
+        discount: Number(discount),
+        total
       });
 
       if (modalRef.current) {
         const modal = new window.bootstrap.Modal(modalRef.current);
         modal.show();
+        setTimer(10); // ⏱ Start countdown
       }
-
-      setTimeout(() => {
-        window.location.href = "https://radharidhani.in/";
-      }, 10000); // 10 seconds
     } catch (err) {
       console.error(err);
       alert("❌ Failed to confirm booking");
@@ -339,13 +406,20 @@ export default function Booking() {
             rows={4}
             onChange={handleChange}
           />
+{/* 
+          <input
+            type="number"
+            className="form-control mb-3"
+            placeholder="Discount (if any)"
+            value={discount}
+            onChange={(e) => setDiscount(e.target.value)}
+          /> */}
 
           <div className="alert alert-success">
             ✅ Book your stay before the prices go up!
             <br />
             <strong className="text-success">
-              Book risk free! Cancel for free anytime before 11:59 PM on Jun 5,
-              2025
+              Book risk free! Cancel for free anytime before 11:59 PM on Jun 5, 2025
             </strong>
           </div>
 
@@ -371,9 +445,7 @@ export default function Booking() {
             </div>
             <div className="d-flex justify-content-between mb-2">
               <strong>No. of Nights</strong>
-              <span>
-                {nights} Night{nights > 1 ? "s" : ""}
-              </span>
+              <span>{nights} Night{nights > 1 ? "s" : ""}</span>
             </div>
             <div className="d-flex justify-content-between mb-2">
               <strong>Room</strong>
@@ -381,25 +453,22 @@ export default function Booking() {
             </div>
             <div className="d-flex justify-content-between mb-2">
               <strong>Guests</strong>
-              <span>
-                {adults} Adults, {children} Children
-              </span>
+              <span>{adults} Adults, {children} Children</span>
             </div>
             <hr />
             <div className="d-flex justify-content-between mb-2">
               <strong>Room only (50% OFF)</strong>
               <span>
-                ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹
-                {subtotal}
+                ₹{room.base_price} → ₹{discountedBasePrice} x {nights} = ₹{subtotal}
               </span>
             </div>
             <div className="d-flex justify-content-between mb-2">
-              <strong>Sub Total (Tax Included)</strong>
+              <strong>Sub Total</strong>
               <span>₹{subtotal}</span>
             </div>
             <div className="d-flex justify-content-between mb-2">
-              <strong>Included Tax</strong>
-              <span>₹{tax}</span>
+              <strong>Discount</strong>
+              <span>₹{discount}</span>
             </div>
             <hr />
             <div className="d-flex justify-content-between mb-2">
@@ -437,7 +506,7 @@ export default function Booking() {
               🎉 <strong>Your booking has been successfully confirmed!</strong>
               <br />
               <br />
-              Redirecting to homepage in <strong>10 seconds...</strong>
+              Redirecting to homepage in <strong>{timer}</strong> second{timer !== 1 ? "s" : ""}...
               <br />
               <span className="text-muted small">Please wait...</span>
             </div>
